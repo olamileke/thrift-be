@@ -1,0 +1,2 @@
+
+{{ $token }} {{ $user->name }}

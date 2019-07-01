@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 use App\User;
+use App\Token;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\ExpiredException;
+
+use App\Mail\ResetPassword;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -32,6 +37,7 @@ class AuthController extends Controller
         return JWT::encode($payload, env('JWT_SECRET'));
     }
 
+
     public function authenticate(Request $request) {
 
         $this->validate($request, [
@@ -42,17 +48,43 @@ class AuthController extends Controller
         $user=User::where('email', $request->input('email'))->first();
 
         if(!$user) {
-            return response()->json(['error'=>'Username or Password is wrong'], 400);
+            return response()->json(['error'=>'Username or Password is wrong','url'=>'api/login'], 400);
         }
 
         $hasher=app()->make('hash');
 
         if($hasher->check($request->input('password'), $user->password)) {
             
-            return response()->json(['token'=>$this->jwt($user)], 200);
+            return response()->json(['token'=>$this->jwt($user),'user'=>$user],200);
         }
 
-        return response()->json(['error'=>'Username or Password is wrong'], 400);
+        return response()->json(['error'=>'Username or Password is wrong','url'=>'api/login'], 400);
+    }
+
+
+    public function sendResetPasswordMail(Request $request) {
+
+        $this->validate($request, [
+
+            'email'=>'required'
+        ]);
+
+
+        $user=User::where('email', $request->input('email'))->first();
+
+        if(!$user) {
+
+            return response()->json(['error'=>'User does not exist', 'url'=>'api/sendpasswordresetmail'], 400);
+        }
+
+        $token=new Token();
+
+        $now=strtotime(date('Y-m-d h:i:s'));
+        $expiry=$now + (60 * 30);
+
+         DB::insert('insert into password_resets(user_id, reset_token, expiry) values(?,?,?)', [$user->id, $token->getHash(), Date('Y-m-d h:i:s', $expiry)]);
+
+        Mail::to($user)->send(new ResetPassword($user, $token->getToken()));
     }
 
 }

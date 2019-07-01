@@ -22,4 +22,9 @@ class MonthlyIncome extends Model implements AuthenticatableContract, Authorizab
     ];
 
     protected $table='monthly_income';
+
+    // public function saving()
+    // {
+    //     return $this->hasMany('App\Saving', 'monthlyincome_id');
+    // }
 }

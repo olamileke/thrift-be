@@ -4,15 +4,13 @@
 		<title></title>
 	</head>
 	<style type="text/css">
-		@import url('https://fonts.googleapis.com/css?family=Gloria+Hallelujah&display=swap');
 		@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
 		@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
-		@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
 		body
 		{
 			margin:0;
 			padding:0;
-			background:url("{{ env('APP_URL') }}/Images/Mail/gravel.png");
+			background:url("{{ env('APP_URL') }}/Images/Mail/dust.png");
 			display:flex;
 			flex-flow:column;
 			justify-content: center;
@@ -21,12 +19,12 @@
 			min-height: 100vh;
 		}
 
-		.heading
+		.heading 
 		{
 			position:relative;
 			top:-5vh;
-			margin-bottom:20px;
-			font-family:'Gloria Hallelujah', cursive;
+			margin-bottom:30px;
+			font-family:'Quicksand', cursive;
 			font-size:1.95em;
 			color:rgba(0,0,0,0.7);
 		}
@@ -36,7 +34,7 @@
 			position:relative;
 			top:-5vh;
 			width:50vw;
-			/*height:50vh;*/
+			border:1px solid rgba(0,0,0,0.07);
 			background:#fff;
 			font-family:'Quicksand', sans-serif;
 			color:rgba(0,0,0,0.7);
@@ -51,7 +49,7 @@
 			top:15px;
 			text-decoration: none;
 			color:#fff;
-			background:#B80F0A;
+			background:#CC0000;
 			padding:5px;
 			display: block;
 			width:70px;
@@ -77,7 +75,7 @@
 
 		.social-links a
 		{
-			color:rgba(0,0,0,0.8);
+			color:rgba(0,0,0,0.75);
 			margin-right:5px;
 			text-decoration: none;
 			font-family:'Quicksand', sans-serif
@@ -87,7 +85,7 @@
 		{
 			position:relative;
 			top:18px;
-			color:rgba(0,0,0,0.7);
+			color:rgba(0,0,0,0.75);
 			font-family:'Raleway', sans-serif;
 		}
 	</style>

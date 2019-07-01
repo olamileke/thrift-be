@@ -31,7 +31,7 @@ class UsersController extends Controller
 
         if($user) {
 
-            return response()->json(['error'=>'User already exists'], 403);
+            return response()->json(['error'=>'User already exists', 'url'=>'api/signup'], 403);
         }
 
         $hasher=app()->make('hash');
@@ -61,7 +61,7 @@ class UsersController extends Controller
 
         if(!$user) {
 
-            return response()->json(['error'=>'Invalid activation token'], 400);
+            return response()->json(['error'=>'Invalid activation token','url'=>'api/account/activate'], 400);
         }
 
         $user->activation_token=null;

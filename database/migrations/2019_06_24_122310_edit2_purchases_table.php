@@ -15,7 +15,9 @@ class Edit2PurchasesTable extends Migration
     {
         Schema::table('purchases', function (Blueprint $table) {
             
-            $table->time('created_at');
+            $table->dropColumn('day');
+            $table->dropColumn('month');
+            $table->dropColumn('year');
         });
     }
 
@@ -28,7 +30,9 @@ class Edit2PurchasesTable extends Migration
     {
         Schema::table('purchases', function (Blueprint $table) {
             
-            $table->dropColumn('created_at');
+            $table->integer('day');
+            $table->string('month');
+            $table->integer('year');
         });
     }
 }

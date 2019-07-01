@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use App\MonthlyIncome;
 use App\Saving;
 use App\Purchases;
+use App\FormatDateTime;
 use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
@@ -34,6 +35,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+
+    public function getLastName() {
+
+        return explode(' ', $this->name)[1];
+    }
 
 
     /*
@@ -90,42 +97,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getTodayPurchases() {
 
         $purchases=Purchase::where('user_id', $this->id)
-                           ->where('day', date('d'))
-                           ->where('month', date('F'))
-                           ->where('year', date('Y'))
+                           ->whereDay('created_at','=',date('d'))
+                           ->whereMonth('created_at','=', date('m'))
+                           ->whereYear('created_at','=',date('Y'))
                            ->select('name','amount','created_at')
                            ->get();
-        // return $purchases;
 
-        return $this->getFormattedTimeString($purchases);
+        $datetime=new FormatDateTime();
+
+        return $datetime->formatCreatedAtString($purchases);
     }
-
-
-    public function getFormattedTimeString($purchases) {
-
-        // getting the time the purchase was created in 12 hour form
-
-        foreach($purchases as $purchase) {
-
-            date_default_timezone_set('Africa/Lagos');
-            $time=substr($purchase->created_at->format('H:i:s'),0,5);
-            $hour=(int)substr($time,0,2) + 1;
-
-            if($hour < 12) {
-
-                $purchase->time_created=$time.' AM';
-            }
-            elseif($hour == 12) {
-
-                $purchase->time_created=$time.' PM';                
-            }
-            else {
-
-                $purchase->time_created=((int)$hour - 12).substr($time,2).' PM';                
-            }
-        }
-
-        return $purchases;
-    }
-    
+   
 }

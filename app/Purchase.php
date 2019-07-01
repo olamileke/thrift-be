@@ -18,7 +18,7 @@ class Purchase extends Model implements AuthenticatableContract, AuthorizableCon
      * @var array
      */
     protected $fillable = [
-        'user_id', 'monthlyincome_id','name','amount','day','month','year'
+        'user_id', 'monthlyincome_id','name','amount'
     ];
 
 }
