@@ -92,7 +92,10 @@ class ExpensesController extends Controller
 
         $datetime=new FormatDateTime();
 
-        return response()->json(['data'=>$datetime->formatCreatedAtStringMonth($purchases)],200);
+        $monthIncome=$purchases[0]->monthlyincome;
+        $savings=$monthIncome->savings;
+
+        return response()->json(['purchases'=>$datetime->formatCreatedAtStringMonth($purchases), 'monthIncome'=>$monthIncome, 'savings'=>$savings],200);
     }
 
 

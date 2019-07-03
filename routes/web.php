@@ -25,11 +25,13 @@ $router->group(['middleware'=>'jwt.auth'], function() use ($router) {
 	$router->get('/api/comparison/{period1Start}/{period1End}/{period2Start}/{period2End}', 'ExpensesController@comparison');
 	$router->get('/api/expenses/search/{searchTerm}', 'ExpensesController@search');
 	$router->get('/api/dashboard/fetch-report-purchases/{from}/{to}', 'DashboardController@fetchReports');
+	$router->get('/api/dashboard/overview', 'DashboardController@overview');
 });
 
 $router->post('/api/signup', 'UsersController@register');
 $router->post('/api/account/activate/{token}', 'UsersController@activateAccount');
 $router->post('/api/login', 'AuthController@authenticate');
 $router->post('/api/sendpasswordresetmail', 'AuthController@sendResetPasswordMail');
-
+$router->get('/api/password/reset/verifytoken/{resetToken}', 'AuthController@verifyToken');
+$router->post('/api/password/reset', 'AuthController@resetPassword');
 

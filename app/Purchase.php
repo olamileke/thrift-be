@@ -21,4 +21,10 @@ class Purchase extends Model implements AuthenticatableContract, AuthorizableCon
         'user_id', 'monthlyincome_id','name','amount'
     ];
 
+
+    public function monthlyincome() {
+
+    	return $this->belongsTo('App\MonthlyIncome');
+    }
+
 }

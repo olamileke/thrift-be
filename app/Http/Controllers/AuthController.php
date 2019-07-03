@@ -87,4 +87,48 @@ class AuthController extends Controller
         Mail::to($user)->send(new ResetPassword($user, $token->getToken()));
     }
 
+
+    public function verifyToken($resetToken) {
+
+        $token=new Token($resetToken);
+        $hashedToken=$token->getHash();
+
+        $reset=DB::Table('password_resets')->where('reset_token', $hashedToken)->first();
+
+        if(!$reset) {
+
+            return response()->json(['error'=>'Invalid Token', 'url'=>'api/password/reset/verifytoken'],400);
+        }
+
+        $now=strtotime(date('Y-m-d h:i:s'));
+
+        if($now > strtotime($reset->expiry)) {
+
+            return response()->json(['error'=>'Expired Token', 'url'=>'api/password/reset/verifytoken'], 400);
+        }
+
+
+        return response()->json(['userId'=>$reset->user_id],200);
+    }
+
+
+    public function resetPassword(Request $request) {
+
+        $this->validate($request, [
+
+            'password'=>'required|min:8',
+            'userId'=>'required'
+        ]);
+
+        $hasher=app()->make('hash');
+
+        $user=User::where('id', $request->input('userId'))->first();
+
+        $user->password=$hasher->make($request->input('password'));
+
+        $user->save();
+
+        DB::delete('delete from password_resets where user_id=?', [$user->id]);
+    }
+
 }

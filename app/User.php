@@ -107,5 +107,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         return $datetime->formatCreatedAtString($purchases);
     }
+
+
+    public function getFirstPurchaseDate() {
+
+        return Purchase::where('user_id', $this->id)
+                        ->orderBy('created_at','asc')
+                        ->limit(1)
+                        ->select('created_at')->first();
+    }
    
 }
